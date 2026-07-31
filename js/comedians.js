@@ -9,12 +9,24 @@ function comedianCardHTML(c) {
   `;
 }
 
+const GUESTS_PER_PAGE = 25;
+let guestPage = 1;
+
 function renderComedianGrid(comedians) {
   const grid = document.getElementById("comedian-grid");
+  const paginationEl = document.getElementById("comedian-pagination");
   const sorted = [...comedians].sort((a, b) => a.name.localeCompare(b.name));
-  grid.innerHTML = sorted.length
-    ? sorted.map(comedianCardHTML).join("")
-    : '<p class="no-results">No comedians match your search.</p>';
+
+  if (!sorted.length) {
+    grid.innerHTML = '<p class="no-results">No guests match your search.</p>';
+    paginationEl.innerHTML = "";
+    return;
+  }
+
+  const { items, page, totalPages } = paginate(sorted, guestPage, GUESTS_PER_PAGE);
+  guestPage = page;
+  grid.innerHTML = items.map(comedianCardHTML).join("");
+  paginationEl.innerHTML = paginationControlsHTML(page, totalPages);
 }
 
 function filterComedians(query) {
@@ -26,13 +38,24 @@ function filterComedians(query) {
 function initComedianSearch() {
   const input = document.getElementById("comedian-search");
   input.addEventListener("input", () => {
+    guestPage = 1;
     renderComedianGrid(filterComedians(input.value));
+  });
+}
+
+function initComedianPagination() {
+  document.getElementById("comedian-pagination").addEventListener("click", (event) => {
+    const btn = event.target.closest(".pagination-btn");
+    if (!btn || btn.disabled) return;
+    guestPage = Number(btn.dataset.page);
+    renderComedianGrid(filterComedians(document.getElementById("comedian-search").value));
   });
 }
 
 function renderComedians() {
   renderComedianGrid(COMEDIANS);
   initComedianSearch();
+  initComedianPagination();
 }
 
 loadSiteData()

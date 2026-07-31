@@ -41,3 +41,21 @@ const IG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2
 function instagramLink(handle) {
   return `<a class="ig-link" href="https://instagram.com/${handle}" target="_blank" rel="noopener" aria-label="Instagram">${IG_ICON}</a>`;
 }
+
+function paginate(items, page, pageSize) {
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const clampedPage = Math.min(Math.max(1, page), totalPages);
+  const start = (clampedPage - 1) * pageSize;
+  return { items: items.slice(start, start + pageSize), page: clampedPage, totalPages };
+}
+
+function paginationControlsHTML(page, totalPages) {
+  if (totalPages <= 1) return "";
+  return `
+    <div class="pagination">
+      <button class="pagination-btn" data-page="${page - 1}" ${page <= 1 ? "disabled" : ""}>&larr; Prev</button>
+      <span class="pagination-status">Page ${page} of ${totalPages}</span>
+      <button class="pagination-btn" data-page="${page + 1}" ${page >= totalPages ? "disabled" : ""}>Next &rarr;</button>
+    </div>
+  `;
+}

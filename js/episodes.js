@@ -46,12 +46,24 @@ function episodeTileHTML(ep) {
   `;
 }
 
+const EPISODES_PER_PAGE = 10;
+let episodePage = 1;
+
 function renderEpisodeList(episodes) {
   const list = document.getElementById("episode-list");
+  const paginationEl = document.getElementById("episode-pagination");
   const sorted = [...episodes].sort((a, b) => b.id - a.id);
-  list.innerHTML = sorted.length
-    ? sorted.map(episodeTileHTML).join("")
-    : '<p class="no-results">No episodes match your search.</p>';
+
+  if (!sorted.length) {
+    list.innerHTML = '<p class="no-results">No episodes match your search.</p>';
+    paginationEl.innerHTML = "";
+    return;
+  }
+
+  const { items, page, totalPages } = paginate(sorted, episodePage, EPISODES_PER_PAGE);
+  episodePage = page;
+  list.innerHTML = items.map(episodeTileHTML).join("");
+  paginationEl.innerHTML = paginationControlsHTML(page, totalPages);
 }
 
 function filterEpisodes(query) {
@@ -65,7 +77,17 @@ function filterEpisodes(query) {
 function initEpisodeSearch() {
   const input = document.getElementById("episode-search");
   input.addEventListener("input", () => {
+    episodePage = 1;
     renderEpisodeList(filterEpisodes(input.value));
+  });
+}
+
+function initEpisodePagination() {
+  document.getElementById("episode-pagination").addEventListener("click", (event) => {
+    const btn = event.target.closest(".pagination-btn");
+    if (!btn || btn.disabled) return;
+    episodePage = Number(btn.dataset.page);
+    renderEpisodeList(filterEpisodes(document.getElementById("episode-search").value));
   });
 }
 
@@ -73,6 +95,7 @@ function renderEpisodes() {
   const list = document.getElementById("episode-list");
   renderEpisodeList(EPISODES);
   initEpisodeSearch();
+  initEpisodePagination();
 
   list.addEventListener("click", (event) => {
     const toggle = event.target.closest(".episode-toggle");
