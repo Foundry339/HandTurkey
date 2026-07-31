@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HandTurkey — Story Warz Episode Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="brand">
+        <span class="brand-mark">Hand<span>Turkey</span></span>
+        <span class="brand-tag">Story Warz Tracker</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="active">Episodes</a>
+        <a href="comedians.html">Comedians</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Every <span class="accent">Story Warz</span> episode,<br />tracked.</h1>
+    <p>Browse episodes, see who told stories each week, check contestant records, and reveal each week's winner.</p>
+  </section>
+
+  <main class="page">
+    <h2 class="section-title">Episodes — Most Recent First</h2>
+    <div class="episode-list" id="episode-list"></div>
+  </main>
+
+  <footer class="site-footer">
+    HandTurkey is an unofficial fan-made tracker for <span>Story Warz</span>. Data shown is placeholder.
+  </footer>
+
+  <script src="data/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/episodes.js"></script>
+</body>
+</html>
