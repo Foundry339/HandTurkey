@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HandTurkey — Comedians</title>
+  <title>HandTurkey — Guests</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -15,23 +15,26 @@
       </div>
       <nav class="main-nav">
         <a href="index.html">Episodes</a>
-        <a href="comedians.html" class="active">Comedians</a>
+        <a href="comedians.html" class="active">Guests</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
-    <h1>Every comedian who's<br /><span class="accent">stepped up</span> to Story Warz.</h1>
-    <p>Every contestant who has told a story, with their all-time Story Warz record and socials.</p>
+    <h1>Every guest who's<br /><span class="accent">gone to battle</span> in Story Warz.</h1>
+    <p>Every guest who has told a story, with their all-time Story Warz record and socials.</p>
   </section>
 
   <main class="page">
-    <h2 class="section-title">All Comedians</h2>
+    <h2 class="section-title">All Guests</h2>
+    <div class="search-wrap">
+      <input type="text" id="comedian-search" class="search-input" placeholder="Search by guest name…" />
+    </div>
     <div class="comedian-grid" id="comedian-grid"></div>
   </main>
 
   <footer class="site-footer">
-    HandTurkey is an unofficial fan-made tracker for <span>Story Warz</span>. Data shown is placeholder.
+    HandTurkey is an unofficial fan-made tracker for <span>Story Warz</span>. Powered by Foundry339.
   </footer>
 
   <script src="data/data.js"></script>

@@ -1,64 +1,105 @@
 /*
-  PLACEHOLDER DATA
+  LIVE DATA LOADER
   ----------------
-  This file is the shell's stand-in for the CSV that will eventually
-  drive the site. Swap COMEDIANS / EPISODES below with data parsed
-  from the published CSV — the rendering code in js/episodes.js and
-  js/comedians.js doesn't need to change as long as the shape matches.
+  Fetches COMEDIANS and EPISODES from your published Google Sheets CSVs.
+  Paste the two "Publish to web" CSV links below, then serve the site
+  over http:// (browsers block fetch() on file:// pages) — e.g. `npx serve .`.
 */
 
-const COMEDIANS = [
-  { id: "buddy-turkerson", name: "Buddy Turkerson", instagram: "buddyturkerson", wins: 1, losses: 2 },
-  { id: "gobbles-mcgee",   name: "Gobbles McGee",    instagram: "gobblesmcgee",   wins: 0, losses: 3 },
-  { id: "ricky-stanza",    name: "Ricky Stanza",     instagram: "rickystanza",    wins: 0, losses: 2 },
-  { id: "nadia-cross",     name: "Nadia Cross",      instagram: "nadiacross",     wins: 1, losses: 1 },
-  { id: "trevor-lang",     name: "Trevor Lang",      instagram: "trevorlang",     wins: 0, losses: 3 },
-  { id: "sunny-okafor",    name: "Sunny Okafor",     instagram: "sunnyokafor",    wins: 1, losses: 1 },
-  { id: "marco-diaz",      name: "Marco Diaz",       instagram: "marcodiaz",      wins: 0, losses: 2 },
-  { id: "priya-anand",     name: "Priya Anand",      instagram: "priyaanand",     wins: 0, losses: 3 },
-  { id: "jake-holloway",   name: "Jake Holloway",    instagram: "jakeholloway",   wins: 1, losses: 1 },
-  { id: "lila-chen",       name: "Lila Chen",        instagram: "lilachen",       wins: 1, losses: 2 },
-];
+const COMEDIANS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6teP_DRbakj2-DrVRtF1iUtcakbJcrX20IkbAiz6uCin5qiRukmDpP5PD4UFzaUrpIMHbGwp6mlmK/pub?gid=1221586162&single=true&output=csv";
+const EPISODES_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6teP_DRbakj2-DrVRtF1iUtcakbJcrX20IkbAiz6uCin5qiRukmDpP5PD4UFzaUrpIMHbGwp6mlmK/pub?gid=0&single=true&output=csv";
 
-const EPISODES = [
-  {
-    id: 101,
-    title: "Turkey Day",
-    date: "2026-05-07",
-    youtubeUrl: "https://www.youtube.com/watch?v=placeholder101",
-    contestantIds: ["buddy-turkerson", "gobbles-mcgee", "ricky-stanza", "nadia-cross", "trevor-lang"],
-    winnerId: "buddy-turkerson",
-  },
-  {
-    id: 102,
-    title: "The Long Con",
-    date: "2026-05-14",
-    youtubeUrl: "https://www.youtube.com/watch?v=placeholder102",
-    contestantIds: ["gobbles-mcgee", "sunny-okafor", "marco-diaz", "priya-anand", "jake-holloway"],
-    winnerId: "sunny-okafor",
-  },
-  {
-    id: 103,
-    title: "Feathers Flying",
-    date: "2026-05-21",
-    youtubeUrl: "https://www.youtube.com/watch?v=placeholder103",
-    contestantIds: ["buddy-turkerson", "nadia-cross", "lila-chen", "trevor-lang", "marco-diaz"],
-    winnerId: "nadia-cross",
-  },
-  {
-    id: 104,
-    title: "Cold Feet",
-    date: "2026-05-28",
-    youtubeUrl: "https://www.youtube.com/watch?v=placeholder104",
-    contestantIds: ["ricky-stanza", "priya-anand", "jake-holloway", "lila-chen", "sunny-okafor"],
-    winnerId: "jake-holloway",
-  },
-  {
-    id: 105,
-    title: "Guilt",
-    date: "2026-06-04",
-    youtubeUrl: "https://www.youtube.com/watch?v=placeholder105",
-    contestantIds: ["buddy-turkerson", "gobbles-mcgee", "priya-anand", "lila-chen", "trevor-lang"],
-    winnerId: "lila-chen",
-  },
-];
+let COMEDIANS = [];
+let EPISODES = [];
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (inQuotes) {
+      if (char === '"' && next === '"') {
+        field += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = false;
+      } else {
+        field += char;
+      }
+    } else if (char === '"') {
+      inQuotes = true;
+    } else if (char === ",") {
+      row.push(field);
+      field = "";
+    } else if (char === "\n" || char === "\r") {
+      if (char === "\r" && next === "\n") i++;
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else {
+      field += char;
+    }
+  }
+  if (field.length || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  const headers = rows.shift().map((h) => h.trim());
+  return rows
+    .filter((r) => r.some((cell) => cell.trim() !== ""))
+    .map((r) => {
+      const obj = {};
+      headers.forEach((h, idx) => {
+        obj[h] = (r[idx] || "").trim();
+      });
+      return obj;
+    });
+}
+
+function rowToComedian(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    instagram: row.instagram || "",
+    wins: Number(row.wins) || 0,
+    losses: Number(row.losses) || 0,
+    photoUrl: row.photo_url || row.photoUrl || "",
+  };
+}
+
+function rowToEpisode(row) {
+  const contestantIds = Object.keys(row)
+    .filter((key) => /contestant_\d+/i.test(key))
+    .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+    .map((key) => row[key])
+    .filter(Boolean);
+
+  return {
+    id: Number(row.episode_id),
+    title: row.episode_title || row.episode_name || "",
+    date: row.date || row.episode_date || "",
+    youtubeUrl: row.youtube_url || row.URL || row.url || "",
+    contestantIds,
+    winnerId: row.winner_id,
+  };
+}
+
+async function fetchCSV(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
+  return parseCSV(await response.text());
+}
+
+async function loadSiteData() {
+  COMEDIANS = (await fetchCSV(COMEDIANS_CSV_URL)).map(rowToComedian);
+  EPISODES = (await fetchCSV(EPISODES_CSV_URL)).map(rowToEpisode);
+}

@@ -13,9 +13,23 @@ function getInitials(name) {
     .toUpperCase();
 }
 
-function formatDate(isoDate) {
-  const d = new Date(isoDate + "T00:00:00");
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+function formatDate(rawDate) {
+  const parts = rawDate.includes("-")
+    ? rawDate.split("-").map(Number)
+    : rawDate.split("/").map(Number);
+  const [y, m, d] = rawDate.includes("-") ? parts : [parts[2], parts[0], parts[1]];
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function avatarHTML(comedian, extraHTML = "") {
+  if (comedian.photoUrl) {
+    return `<div class="avatar avatar-photo" style="background-image:url('${comedian.photoUrl}')">${extraHTML}</div>`;
+  }
+  return `<div class="avatar">${getInitials(comedian.name)}${extraHTML}</div>`;
 }
 
 const IG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

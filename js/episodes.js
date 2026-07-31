@@ -6,7 +6,7 @@ function contestantCardHTML(comedianId, isWinnerRevealed) {
     : "";
   return `
     <div class="contestant-card${winnerClass}" data-comedian="${c.id}">
-      <div class="avatar">${getInitials(c.name)}${badge}</div>
+      ${avatarHTML(c, badge)}
       <p class="contestant-name">${c.name}</p>
       <p class="contestant-record">Record: <strong>${c.wins}-${c.losses}</strong></p>
       ${instagramLink(c.instagram)}
@@ -87,26 +87,30 @@ function renderEpisodes() {
     if (revealBtn) {
       const tile = revealBtn.closest(".episode-tile");
       const winnerId = revealBtn.dataset.winner;
-      const winner = getComedian(winnerId);
+      const isRevealed = tile.classList.toggle("winner-revealed");
 
-      tile.querySelectorAll(".contestant-card").forEach((card) => {
-        if (card.dataset.comedian === winnerId) {
-          card.classList.add("is-winner");
-          card.querySelector(".avatar").insertAdjacentHTML(
-            "beforeend",
-            '<span class="winner-badge" title="Winner">&#127942;</span>'
-          );
-        }
-      });
+      const winnerCard = tile.querySelector(`.contestant-card[data-comedian="${winnerId}"]`);
+      winnerCard.classList.toggle("is-winner", isRevealed);
+      const badge = winnerCard.querySelector(".winner-badge");
+      if (isRevealed && !badge) {
+        winnerCard.querySelector(".avatar").insertAdjacentHTML(
+          "beforeend",
+          '<span class="winner-badge" title="Winner">&#127942;</span>'
+        );
+      } else if (!isRevealed && badge) {
+        badge.remove();
+      }
 
-      revealBtn.outerHTML = `
-        <div class="winner-reveal">
-          <span class="label">Winner</span>
-          <span class="name">${winner.name}</span>
-        </div>
-      `;
+      revealBtn.textContent = isRevealed ? "Hide Winner" : "Reveal Winner";
+      revealBtn.classList.toggle("is-revealed", isRevealed);
     }
   });
 }
 
-renderEpisodes();
+loadSiteData()
+  .then(renderEpisodes)
+  .catch((err) => {
+    console.error(err);
+    document.getElementById("episode-list").innerHTML =
+      '<p class="no-results">Couldn\'t load episode data. Check the CSV URLs in data/data.js.</p>';
+  });

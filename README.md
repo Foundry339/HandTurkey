@@ -15,15 +15,20 @@ Unofficial fan tracker for the *Story Warz* podcast. Static HTML/CSS/JS, no buil
 
 ## Plugging in real data
 
-Right now `data/data.js` has placeholder comedians and 5 placeholder episodes. When your CSV is ready:
+`data/data.js` fetches live from two Google Sheets tabs (Comedians + Episodes), each published to the web as CSV:
 
-1. Match the columns in `data/comedians_template.csv` and `data/episodes_template.csv`.
-2. Convert each CSV row into an object in the `COMEDIANS` / `EPISODES` arrays in `data/data.js` (any spreadsheet-to-JSON tool, or ask Claude to do the conversion for you).
-3. `id` values must match between an episode's `contestantIds`/`winnerId` and a comedian's `id`.
-4. Everything else (tiles, records, reveal button, comedians grid) updates automatically — no HTML/CSS/JS changes needed.
-
-If you'd rather the site fetch the CSV directly at runtime instead of hand-editing `data.js`, that's a small follow-up (needs a tiny local server since browsers block `fetch()` on local files) — just ask.
+1. Build out your sheet with columns matching `data/comedians_template.csv` and `data/episodes_template.csv` (the loader is tolerant of a few common header variants, e.g. `date` or `episode_date`, `youtube_url` or `URL`).
+2. In Google Sheets: File → Share → Publish to web → pick the tab → CSV → Publish. Do this for both the Comedians and Episodes tabs.
+3. Paste the two published CSV links into `COMEDIANS_CSV_URL` and `EPISODES_CSV_URL` at the top of `data/data.js`.
+4. `id` values must match between an episode's `contestant_*`/`winner_id` and a comedian's `id`.
+5. From then on, adding a row to either sheet tab updates the live site — no code changes needed.
 
 ## Running locally
 
-Open `index.html` directly in a browser, or serve the folder (e.g. `npx serve .`) if you later add CSV fetching.
+Browsers block `fetch()` on files opened directly (`file://`), so serve the folder instead:
+
+```
+npx serve .
+```
+
+then open the printed `http://localhost:...` URL.

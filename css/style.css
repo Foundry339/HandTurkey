@@ -177,13 +177,13 @@ a { color: inherit; text-decoration: none; }
   background: var(--grey-border);
 }
 
-/* ---------- Episode search ---------- */
+/* ---------- Search ---------- */
 
-.episode-search-wrap {
+.search-wrap {
   margin-bottom: 20px;
 }
 
-.episode-search {
+.search-input {
   width: 100%;
   padding: 12px 16px;
   border-radius: 10px;
@@ -194,11 +194,11 @@ a { color: inherit; text-decoration: none; }
   font-family: inherit;
 }
 
-.episode-search::placeholder {
+.search-input::placeholder {
   color: var(--text-light);
 }
 
-.episode-search:focus {
+.search-input:focus {
   outline: none;
   border-color: var(--red);
   box-shadow: 0 0 0 3px rgba(200, 23, 23, 0.15);
@@ -349,9 +349,20 @@ a { color: inherit; text-decoration: none; }
   position: relative;
 }
 
-.contestant-card.is-winner .avatar {
+.contestant-card.is-winner .avatar:not(.avatar-photo) {
   background: linear-gradient(145deg, var(--red), #3d0808);
   border-color: var(--red-bright);
+}
+
+.contestant-card.is-winner .avatar.avatar-photo {
+  border-color: var(--red-bright);
+  box-shadow: 0 0 0 2px var(--red-bright), 0 0 16px rgba(226, 38, 42, 0.5);
+}
+
+.avatar-photo {
+  background-size: cover;
+  background-position: center;
+  font-size: 0;
 }
 
 .winner-badge {
@@ -457,26 +468,14 @@ a { color: inherit; text-decoration: none; }
   cursor: default;
 }
 
-.winner-reveal {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
+.btn-reveal.is-revealed {
+  background: var(--grey-light);
   color: var(--white);
+  box-shadow: none;
 }
 
-.winner-reveal .label {
-  color: var(--text-light);
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-}
-
-.winner-reveal .name {
-  font-family: 'Anton', 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  color: var(--red-bright);
-  letter-spacing: 0.02em;
+.btn-reveal.is-revealed:hover {
+  background: var(--grey-border);
 }
 
 /* ---------- Comedians directory ---------- */
