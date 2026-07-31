@@ -23,6 +23,7 @@ const COMEDIANS = [
 const EPISODES = [
   {
     id: 101,
+    title: "Turkey Day",
     date: "2026-05-07",
     youtubeUrl: "https://www.youtube.com/watch?v=placeholder101",
     contestantIds: ["buddy-turkerson", "gobbles-mcgee", "ricky-stanza", "nadia-cross", "trevor-lang"],
@@ -30,6 +31,7 @@ const EPISODES = [
   },
   {
     id: 102,
+    title: "The Long Con",
     date: "2026-05-14",
     youtubeUrl: "https://www.youtube.com/watch?v=placeholder102",
     contestantIds: ["gobbles-mcgee", "sunny-okafor", "marco-diaz", "priya-anand", "jake-holloway"],
@@ -37,6 +39,7 @@ const EPISODES = [
   },
   {
     id: 103,
+    title: "Feathers Flying",
     date: "2026-05-21",
     youtubeUrl: "https://www.youtube.com/watch?v=placeholder103",
     contestantIds: ["buddy-turkerson", "nadia-cross", "lila-chen", "trevor-lang", "marco-diaz"],
@@ -44,6 +47,7 @@ const EPISODES = [
   },
   {
     id: 104,
+    title: "Cold Feet",
     date: "2026-05-28",
     youtubeUrl: "https://www.youtube.com/watch?v=placeholder104",
     contestantIds: ["ricky-stanza", "priya-anand", "jake-holloway", "lila-chen", "sunny-okafor"],
@@ -51,6 +55,7 @@ const EPISODES = [
   },
   {
     id: 105,
+    title: "Guilt",
     date: "2026-06-04",
     youtubeUrl: "https://www.youtube.com/watch?v=placeholder105",
     contestantIds: ["buddy-turkerson", "gobbles-mcgee", "priya-anand", "lila-chen", "trevor-lang"],

@@ -24,6 +24,7 @@ function episodeTileHTML(ep) {
       <button class="episode-toggle" aria-expanded="false">
         <span class="episode-toggle-left">
           <span class="episode-number">Episode ${ep.id}</span>
+          <span class="episode-title">${ep.title}</span>
           <span class="episode-date">${formatDate(ep.date)}</span>
         </span>
         <span class="episode-chevron">&#9660;</span>
@@ -45,10 +46,33 @@ function episodeTileHTML(ep) {
   `;
 }
 
+function renderEpisodeList(episodes) {
+  const list = document.getElementById("episode-list");
+  const sorted = [...episodes].sort((a, b) => b.id - a.id);
+  list.innerHTML = sorted.length
+    ? sorted.map(episodeTileHTML).join("")
+    : '<p class="no-results">No episodes match your search.</p>';
+}
+
+function filterEpisodes(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return EPISODES;
+  return EPISODES.filter(
+    (ep) => String(ep.id).includes(q) || ep.title.toLowerCase().includes(q)
+  );
+}
+
+function initEpisodeSearch() {
+  const input = document.getElementById("episode-search");
+  input.addEventListener("input", () => {
+    renderEpisodeList(filterEpisodes(input.value));
+  });
+}
+
 function renderEpisodes() {
   const list = document.getElementById("episode-list");
-  const sorted = [...EPISODES].sort((a, b) => b.id - a.id);
-  list.innerHTML = sorted.map(episodeTileHTML).join("");
+  renderEpisodeList(EPISODES);
+  initEpisodeSearch();
 
   list.addEventListener("click", (event) => {
     const toggle = event.target.closest(".episode-toggle");
