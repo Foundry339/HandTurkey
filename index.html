@@ -26,9 +26,18 @@
   </section>
 
   <main class="page">
-    <h2 class="section-title">Episodes — Most Recent First</h2>
-    <div class="search-wrap">
-      <input type="text" id="episode-search" class="search-input" placeholder="Search by episode number or title…" />
+    <h2 class="section-title">All Episodes</h2>
+    <div class="controls-row">
+      <div class="search-wrap">
+        <input type="text" id="episode-search" class="search-input" placeholder="Search by episode number or title…" />
+      </div>
+      <div class="sort-wrap">
+        <label for="episode-sort" class="sort-label">Sort by</label>
+        <select id="episode-sort" class="sort-select">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
     </div>
     <div class="episode-list" id="episode-list"></div>
     <div class="pagination" id="episode-pagination"></div>

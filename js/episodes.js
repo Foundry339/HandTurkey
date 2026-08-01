@@ -48,11 +48,14 @@ function episodeTileHTML(ep) {
 
 const EPISODES_PER_PAGE = 10;
 let episodePage = 1;
+let episodeSortOrder = "newest";
 
 function renderEpisodeList(episodes) {
   const list = document.getElementById("episode-list");
   const paginationEl = document.getElementById("episode-pagination");
-  const sorted = [...episodes].sort((a, b) => b.id - a.id);
+  const sorted = [...episodes].sort((a, b) =>
+    episodeSortOrder === "newest" ? b.id - a.id : a.id - b.id
+  );
 
   if (!sorted.length) {
     list.innerHTML = '<p class="no-results">No episodes match your search.</p>';
@@ -82,6 +85,15 @@ function initEpisodeSearch() {
   });
 }
 
+function initEpisodeSort() {
+  const select = document.getElementById("episode-sort");
+  select.addEventListener("change", () => {
+    episodeSortOrder = select.value;
+    episodePage = 1;
+    renderEpisodeList(filterEpisodes(document.getElementById("episode-search").value));
+  });
+}
+
 function initEpisodePagination() {
   document.getElementById("episode-pagination").addEventListener("click", (event) => {
     const btn = event.target.closest(".pagination-btn");
@@ -95,6 +107,7 @@ function renderEpisodes() {
   const list = document.getElementById("episode-list");
   renderEpisodeList(EPISODES);
   initEpisodeSearch();
+  initEpisodeSort();
   initEpisodePagination();
 
   list.addEventListener("click", (event) => {
