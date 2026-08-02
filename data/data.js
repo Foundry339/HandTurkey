@@ -101,5 +101,17 @@ async function fetchCSV(url) {
 
 async function loadSiteData() {
   COMEDIANS = (await fetchCSV(COMEDIANS_CSV_URL)).map(rowToComedian);
-  EPISODES = (await fetchCSV(EPISODES_CSV_URL)).map(rowToEpisode);
+  const knownIds = new Set(COMEDIANS.map((c) => c.id));
+
+  EPISODES = (await fetchCSV(EPISODES_CSV_URL)).map(rowToEpisode).filter((ep) => {
+    const unknownIds = [...ep.contestantIds, ep.winnerId].filter((id) => !knownIds.has(id));
+    if (unknownIds.length) {
+      console.warn(
+        `Skipping episode ${ep.id} ("${ep.title}") — unknown guest id(s): ${unknownIds.join(", ")}. ` +
+          `Check spelling against the "id" column in the Guests sheet.`
+      );
+      return false;
+    }
+    return true;
+  });
 }
