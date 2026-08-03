@@ -14,6 +14,15 @@ function contestantCardHTML(comedianId, isWinnerRevealed) {
   `;
 }
 
+function gasDigitalBadgeHTML(value) {
+  const v = (value || "").trim();
+  if (!v || /^(false|no|n|0)$/i.test(v)) return "";
+  const label = "&#128274; GaS Digital Exclusive";
+  return v.toLowerCase().startsWith("http")
+    ? `<a href="${v}" target="_blank" rel="noopener" class="gas-badge">${label}</a>`
+    : `<span class="gas-badge">${label}</span>`;
+}
+
 function episodeTileHTML(ep) {
   const contestantsHTML = ep.contestantIds
     .map((id) => contestantCardHTML(id, false))
@@ -32,6 +41,7 @@ function episodeTileHTML(ep) {
       <div class="episode-body">
         <div class="episode-body-inner">
           <div class="episode-body-content">
+            ${gasDigitalBadgeHTML(ep.gasDigital)}
             <div class="contestant-grid">${contestantsHTML}</div>
             <div class="episode-actions">
               <a class="btn btn-outline" href="${ep.youtubeUrl}" target="_blank" rel="noopener">

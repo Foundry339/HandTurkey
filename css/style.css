@@ -395,6 +395,28 @@ a { color: inherit; text-decoration: none; }
   border-top: 1px solid var(--grey-border);
 }
 
+.gas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(230, 178, 46, 0.12);
+  border: 1px solid rgba(230, 178, 46, 0.5);
+  color: #e6b22e;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+a.gas-badge:hover {
+  border-color: #e6b22e;
+  background: rgba(230, 178, 46, 0.2);
+}
+
 .contestant-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

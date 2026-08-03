@@ -90,6 +90,7 @@ function rowToEpisode(row) {
     youtubeUrl: row.youtube_url || row.URL || row.url || "",
     contestantIds,
     winnerId: row.winner_id,
+    gasDigital: row.gas_digital || row.gasDigital || "",
   };
 }
 
