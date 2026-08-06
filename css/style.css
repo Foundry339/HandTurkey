@@ -622,6 +622,34 @@ a.gas-badge:hover {
   margin-bottom: 12px;
 }
 
+/* ---------- Under construction ---------- */
+
+.under-construction {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-light);
+}
+
+.under-construction-icon {
+  font-size: 40px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.under-construction h2 {
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin: 0 0 10px;
+}
+
+.under-construction p {
+  margin: 0;
+  font-size: 14px;
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {
