@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HandTurkey — Stats</title>
+  <title>HandTurkey — Leaderboard</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -16,17 +16,28 @@
       <nav class="main-nav">
         <a href="index.html">Episodes</a>
         <a href="comedians.html">Guests</a>
-        <a href="stats.html" class="active">Stats</a>
+        <a href="stats.html" class="active">Leaderboard</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
     <h1>Story Warz<br /><span class="accent">by the numbers</span>.</h1>
-    <p>Records, streaks, and stories, coming soon.</p>
+    <p>Wins, losses, streaks, and rivalries, tracked from every episode.</p>
   </section>
 
   <main class="page">
+    <div class="stats-summary">
+      <div class="summary-tile">
+        <span class="summary-value" id="stat-total-episodes">&mdash;</span>
+        <span class="summary-label">Episodes Tracked</span>
+      </div>
+      <div class="summary-tile">
+        <span class="summary-value" id="stat-total-guests">&mdash;</span>
+        <span class="summary-label">Guests Tracked</span>
+      </div>
+    </div>
+
     <h2 class="section-title">Leaderboards</h2>
     <div class="stats-grid">
       <div class="stat-card">
@@ -40,6 +51,23 @@
       <div class="stat-card">
         <h3 class="stat-card-title">Total Appearances</h3>
         <ol class="stat-list" id="stat-most-appearances"></ol>
+      </div>
+      <div class="stat-card">
+        <h3 class="stat-card-title">Best Win %</h3>
+        <p class="stat-card-caption">Min. 3 appearances</p>
+        <ol class="stat-list" id="stat-win-percentage"></ol>
+      </div>
+    </div>
+
+    <h2 class="section-title">Notable Records</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3 class="stat-card-title">Host Record</h3>
+        <ol class="stat-list" id="stat-host-record"></ol>
+      </div>
+      <div class="stat-card">
+        <h3 class="stat-card-title">Biggest Rivalry</h3>
+        <div id="stat-biggest-rivalry"></div>
       </div>
     </div>
   </main>
