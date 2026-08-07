@@ -25,11 +25,12 @@ function formatDate(rawDate) {
   });
 }
 
-function avatarHTML(comedian, extraHTML = "") {
+function avatarHTML(comedian, extraHTML = "", extraClass = "") {
+  const classes = `avatar ${extraClass}`.trim();
   if (comedian.photoUrl) {
-    return `<div class="avatar avatar-photo" style="background-image:url('${comedian.photoUrl}')">${extraHTML}</div>`;
+    return `<div class="${classes} avatar-photo" style="background-image:url('${comedian.photoUrl}')">${extraHTML}</div>`;
   }
-  return `<div class="avatar">${getInitials(comedian.name)}${extraHTML}</div>`;
+  return `<div class="${classes}">${getInitials(comedian.name)}${extraHTML}</div>`;
 }
 
 const IG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

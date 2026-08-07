@@ -622,32 +622,81 @@ a.gas-badge:hover {
   margin-bottom: 12px;
 }
 
-/* ---------- Under construction ---------- */
+/* ---------- Stats ---------- */
 
-.under-construction {
-  text-align: center;
-  padding: 80px 24px;
-  color: var(--text-light);
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-.under-construction-icon {
-  font-size: 40px;
-  display: inline-block;
-  margin-bottom: 16px;
+.stat-card {
+  background: var(--charcoal);
+  border: 1px solid var(--grey-border);
+  border-radius: 14px;
+  padding: 22px;
 }
 
-.under-construction h2 {
+.stat-card-title {
   font-family: 'Anton', 'Bebas Neue', sans-serif;
-  font-size: 28px;
+  font-size: 18px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--white);
-  margin: 0 0 10px;
+  color: var(--red-bright);
+  margin: 0 0 18px;
 }
 
-.under-construction p {
+.stat-list {
+  list-style: none;
   margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-rank {
+  width: 20px;
+  flex-shrink: 0;
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.stat-row:first-child .stat-rank {
+  color: var(--red-bright);
+}
+
+.avatar-sm {
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+  margin: 0;
+}
+
+.stat-name {
+  flex: 1;
+  min-width: 0;
   font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-value {
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--white);
+  flex-shrink: 0;
 }
 
 /* ---------- Footer ---------- */
