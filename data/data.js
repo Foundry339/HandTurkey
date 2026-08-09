@@ -74,10 +74,25 @@ function rowToComedian(row) {
     id: row.id,
     name: row.name,
     instagram: row.instagram || "",
-    wins: Number(row.wins) || 0,
-    losses: Number(row.losses) || 0,
+    wins: 0,
+    losses: 0,
     photoUrl: row.photo_url || row.photoUrl || "",
   };
+}
+
+// Wins/losses are derived from the Episodes sheet (who was in it, who won)
+// rather than hand-entered, so a guest's record can never drift out of sync
+// with what's actually recorded episode-by-episode.
+function applyRecordsFromEpisodes(comedians, episodes) {
+  const byId = new Map(comedians.map((c) => [c.id, c]));
+  episodes.forEach((ep) => {
+    ep.contestantIds.forEach((id) => {
+      const comedian = byId.get(id);
+      if (!comedian) return;
+      if (id === ep.winnerId) comedian.wins += 1;
+      else comedian.losses += 1;
+    });
+  });
 }
 
 function rowToEpisode(row) {
@@ -134,6 +149,8 @@ async function loadSiteData() {
     }
     return true;
   });
+
+  applyRecordsFromEpisodes(COMEDIANS, EPISODES);
 }
 
 async function loadPolls() {
