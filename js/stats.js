@@ -113,18 +113,19 @@ function renderStats() {
   document.getElementById("stat-total-episodes").textContent = EPISODES.length;
   document.getElementById("stat-total-guests").textContent = COMEDIANS.length;
 
+  const hosts = detectHosts(EPISODES);
+  const hostIds = new Set(hosts.map((c) => c.id));
+  const nonHostComedians = COMEDIANS.filter((c) => !hostIds.has(c.id));
+
   document.getElementById("stat-most-wins").innerHTML = topGuestsHTML(COMEDIANS, (c) => c.wins);
   document.getElementById("stat-most-losses").innerHTML = topGuestsHTML(COMEDIANS, (c) => c.losses);
   document.getElementById("stat-most-appearances").innerHTML = topGuestsHTML(
-    COMEDIANS,
+    nonHostComedians,
     (c) => c.wins + c.losses
   );
   document.getElementById("stat-win-percentage").innerHTML = topWinPercentageHTML(COMEDIANS);
 
-  const hosts = detectHosts(EPISODES);
   document.getElementById("stat-host-record").innerHTML = hostRecordHTML(hosts);
-
-  const hostIds = new Set(hosts.map((c) => c.id));
   document.getElementById("stat-biggest-rivalry").innerHTML = rivalryHTML(
     biggestRivalry(EPISODES, hostIds)
   );
