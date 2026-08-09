@@ -62,8 +62,14 @@ a { color: inherit; text-decoration: none; }
 
 .brand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
+}
+
+.brand-logo {
+  height: 52px;
+  width: 52px;
+  object-fit: contain;
 }
 
 .brand-mark {
