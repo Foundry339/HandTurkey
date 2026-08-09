@@ -83,7 +83,10 @@ function filterEpisodes(query) {
   const q = query.trim().toLowerCase();
   if (!q) return EPISODES;
   return EPISODES.filter(
-    (ep) => String(ep.id).includes(q) || ep.title.toLowerCase().includes(q)
+    (ep) =>
+      String(ep.id).includes(q) ||
+      ep.title.toLowerCase().includes(q) ||
+      ep.contestantIds.some((id) => getComedian(id)?.name.toLowerCase().includes(q))
   );
 }
 
