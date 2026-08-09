@@ -10,9 +10,13 @@ const COMEDIANS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6teP_DRbakj2-DrVRtF1iUtcakbJcrX20IkbAiz6uCin5qiRukmDpP5PD4UFzaUrpIMHbGwp6mlmK/pub?gid=1221586162&single=true&output=csv";
 const EPISODES_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6teP_DRbakj2-DrVRtF1iUtcakbJcrX20IkbAiz6uCin5qiRukmDpP5PD4UFzaUrpIMHbGwp6mlmK/pub?gid=0&single=true&output=csv";
+const POLLS_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRM0NabfliMCA8UMc9uU5VqagBVicnmGS1v-lHxnjEnpc_MA2vcNfj89-4qlm94qD2qb7FRlBVkN955/pub?output=csv";
+const POLLS_WORKER_URL = "https://handturkey-polls.foundry339.workers.dev";
 
 let COMEDIANS = [];
 let EPISODES = [];
+let POLLS = [];
 
 function parseCSV(text) {
   const rows = [];
@@ -94,6 +98,21 @@ function rowToEpisode(row) {
   };
 }
 
+function rowToPoll(row) {
+  const options = Object.keys(row)
+    .filter((key) => /option_\d+/i.test(key))
+    .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+    .map((key) => row[key])
+    .filter(Boolean);
+
+  return {
+    id: row.poll_id,
+    question: row.question || "",
+    options,
+    status: (row.status || "active").toLowerCase(),
+  };
+}
+
 async function fetchCSV(url) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
@@ -115,4 +134,8 @@ async function loadSiteData() {
     }
     return true;
   });
+}
+
+async function loadPolls() {
+  POLLS = (await fetchCSV(POLLS_CSV_URL)).map(rowToPoll).filter((p) => p.id && p.options.length);
 }

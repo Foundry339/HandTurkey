@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HandTurkey — Story Warz Episode Tracker</title>
+  <title>HandTurkey — Polls</title>
   <link rel="stylesheet" href="css/style.css" />
   <!-- Cloudflare Web Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "befd626eca344a4aaa334a2214b16ce1"}'></script>
@@ -18,35 +18,22 @@
         <span class="brand-tag">Story Warz Database</span>
       </div>
       <nav class="main-nav">
-        <a href="index.html" class="active">Episodes</a>
+        <a href="index.html">Episodes</a>
         <a href="comedians.html">Guests</a>
         <a href="stats.html">Leaderboard</a>
-        <a href="polls.html">Polls</a>
+        <a href="polls.html" class="active">Polls</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
-    <h1>Every <span class="accent">Story Warz</span> episode,<br />tracked.</h1>
-    <p>Browse episodes, see who told stories each week, check contestant records, and reveal each week's winner.</p>
+    <h1>Have your<br /><span class="accent">say</span>.</h1>
+    <p>Vote on the latest Story Warz questions, results shown right after you vote.</p>
   </section>
 
   <main class="page">
-    <h2 class="section-title">All Episodes</h2>
-    <div class="controls-row">
-      <div class="search-wrap">
-        <input type="text" id="episode-search" class="search-input" placeholder="Search by episode number or title…" />
-      </div>
-      <div class="sort-wrap">
-        <label for="episode-sort" class="sort-label">Sort by</label>
-        <select id="episode-sort" class="sort-select">
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-        </select>
-      </div>
-    </div>
-    <div class="episode-list" id="episode-list"></div>
-    <div class="pagination" id="episode-pagination"></div>
+    <h2 class="section-title">Current Polls</h2>
+    <div class="polls-list" id="polls-list"></div>
   </main>
 
   <footer class="site-footer">
@@ -55,6 +42,6 @@
 
   <script src="data/data.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/episodes.js"></script>
+  <script src="js/polls.js"></script>
 </body>
 </html>
