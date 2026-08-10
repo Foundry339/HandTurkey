@@ -73,6 +73,13 @@ function renderGuestPage() {
   const total = comedian.wins + comedian.losses;
   const winPct = total ? Math.round((comedian.wins / total) * 100) : 0;
 
+  const description = `${comedian.name}'s Story Warz stats: ${comedian.wins}-${comedian.losses} record across ${total} episode${total === 1 ? "" : "s"}. See full episode history on HandTurkey.`;
+  document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", `HandTurkey — ${comedian.name}`);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", `HandTurkey — ${comedian.name}`);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", description);
+
   container.innerHTML = `
     <div class="guest-header">
       ${avatarHTML(comedian, "", "guest-avatar")}
