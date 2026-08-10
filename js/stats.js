@@ -1,5 +1,6 @@
 const MIN_APPEARANCES_FOR_WIN_PCT = 3;
 const MIN_MATCHUPS_FOR_RIVALRY = 2;
+const LEADERBOARD_SIZE = 10;
 
 function statRowHTML(rank, comedian, value) {
   return `
@@ -17,7 +18,7 @@ function statRowHTML(rank, comedian, value) {
 function topGuestsHTML(guests, getValue) {
   const ranked = [...guests]
     .sort((a, b) => getValue(b) - getValue(a) || a.name.localeCompare(b.name))
-    .slice(0, 5);
+    .slice(0, LEADERBOARD_SIZE);
 
   if (!ranked.length) return '<li class="no-results">No data yet.</li>';
   return ranked.map((c, i) => statRowHTML(i + 1, c, getValue(c))).join("");
@@ -28,7 +29,7 @@ function topWinPercentageHTML(guests) {
   const winPct = (c) => c.wins / (c.wins + c.losses);
   const ranked = eligible
     .sort((a, b) => winPct(b) - winPct(a) || a.name.localeCompare(b.name))
-    .slice(0, 5);
+    .slice(0, LEADERBOARD_SIZE);
 
   if (!ranked.length) return '<li class="no-results">Not enough data yet.</li>';
   return ranked.map((c, i) => statRowHTML(i + 1, c, `${Math.round(winPct(c) * 100)}%`)).join("");
