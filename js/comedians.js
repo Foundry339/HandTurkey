@@ -13,6 +13,15 @@ function comedianCardHTML(c) {
 
 const GUESTS_PER_PAGE = 25;
 let guestPage = 1;
+let guestFilter = "all";
+
+function matchesGuestFilter(c) {
+  const total = c.wins + c.losses;
+  if (guestFilter === "winners") return c.wins >= 1;
+  if (guestFilter === "multi-winners") return c.wins >= 2;
+  if (guestFilter === "one-appearance") return total === 1;
+  return true;
+}
 
 function renderComedianGrid(comedians) {
   const grid = document.getElementById("comedian-grid");
@@ -33,8 +42,9 @@ function renderComedianGrid(comedians) {
 
 function filterComedians(query) {
   const q = query.trim().toLowerCase();
-  if (!q) return COMEDIANS;
-  return COMEDIANS.filter((c) => c.name.toLowerCase().includes(q));
+  return COMEDIANS.filter(
+    (c) => (!q || c.name.toLowerCase().includes(q)) && matchesGuestFilter(c)
+  );
 }
 
 function initComedianSearch() {
@@ -42,6 +52,18 @@ function initComedianSearch() {
   input.addEventListener("input", () => {
     guestPage = 1;
     renderComedianGrid(filterComedians(input.value));
+  });
+}
+
+function initGuestFilterPills() {
+  const container = document.getElementById("guest-filter-pills");
+  container.addEventListener("click", (event) => {
+    const btn = event.target.closest(".filter-pill");
+    if (!btn) return;
+    guestFilter = btn.dataset.filter;
+    container.querySelectorAll(".filter-pill").forEach((p) => p.classList.toggle("active", p === btn));
+    guestPage = 1;
+    renderComedianGrid(filterComedians(document.getElementById("comedian-search").value));
   });
 }
 
@@ -57,6 +79,7 @@ function initComedianPagination() {
 function renderComedians() {
   renderComedianGrid(COMEDIANS);
   initComedianSearch();
+  initGuestFilterPills();
   initComedianPagination();
 }
 

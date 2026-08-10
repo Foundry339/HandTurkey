@@ -47,8 +47,16 @@
 
   <main class="page">
     <h2 class="section-title">All Guests</h2>
-    <div class="search-wrap">
-      <input type="text" id="comedian-search" class="search-input" placeholder="Search by guest name…" />
+    <div class="controls-row">
+      <div class="search-wrap">
+        <input type="text" id="comedian-search" class="search-input" placeholder="Search by guest name…" />
+      </div>
+      <div class="filter-pills" id="guest-filter-pills">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="winners">Winners</button>
+        <button class="filter-pill" data-filter="multi-winners">Multiple Time Winners</button>
+        <button class="filter-pill" data-filter="one-appearance">One Appearance</button>
+      </div>
     </div>
     <div class="comedian-grid" id="comedian-grid"></div>
     <div class="pagination" id="comedian-pagination"></div>

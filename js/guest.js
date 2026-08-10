@@ -42,6 +42,17 @@ function themeTagsHTML(guestEpisodes) {
   return themes.map((t) => `<span class="theme-tag">${t}</span>`).join("");
 }
 
+function bookTagsHTML(guestEpisodes) {
+  const counts = {};
+  guestEpisodes.forEach((ep) => {
+    if (!ep.prizeBook) return;
+    counts[ep.prizeBook] = (counts[ep.prizeBook] || 0) + 1;
+  });
+  const books = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+  if (!books.length) return '<p class="no-results">No prize books recorded yet.</p>';
+  return books.map((b) => `<span class="theme-tag">${b}</span>`).join("");
+}
+
 function renderGuestPage() {
   const container = document.getElementById("guest-content");
   const guestId = getQueryParam("id");
@@ -83,6 +94,9 @@ function renderGuestPage() {
 
     <h2 class="section-title">Themes Played</h2>
     <div class="theme-tags">${themeTagsHTML(guestEpisodes)}</div>
+
+    <h2 class="section-title">Books Played For</h2>
+    <div class="theme-tags">${bookTagsHTML(guestEpisodes)}</div>
 
     <h2 class="section-title">Episode History</h2>
     <div class="episode-list" id="guest-episode-list">
