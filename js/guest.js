@@ -42,18 +42,6 @@ function themeTagsHTML(guestEpisodes) {
   return themes.map((t) => `<span class="theme-tag">${t}</span>`).join("");
 }
 
-function episodeHistoryRowHTML(comedian, ep) {
-  const isWin = ep.winnerId === comedian.id;
-  return `
-    <a class="history-row" href="index.html#episode-${ep.id}">
-      <span class="history-episode">Episode ${ep.id}</span>
-      <span class="history-title">${ep.title}</span>
-      <span class="history-date">${formatDate(ep.date)}</span>
-      <span class="history-result ${isWin ? "is-win" : "is-loss"}">${isWin ? "Won" : "Lost"}</span>
-    </a>
-  `;
-}
-
 function renderGuestPage() {
   const container = document.getElementById("guest-content");
   const guestId = getQueryParam("id");
@@ -97,10 +85,12 @@ function renderGuestPage() {
     <div class="theme-tags">${themeTagsHTML(guestEpisodes)}</div>
 
     <h2 class="section-title">Episode History</h2>
-    <div class="history-list">
-      ${guestEpisodes.map((ep) => episodeHistoryRowHTML(comedian, ep)).join("")}
+    <div class="episode-list" id="guest-episode-list">
+      ${guestEpisodes.map((ep) => episodeTileHTML(ep, comedian.id)).join("")}
     </div>
   `;
+
+  initEpisodeTileInteractions(document.getElementById("guest-episode-list"));
 }
 
 loadSiteData()
