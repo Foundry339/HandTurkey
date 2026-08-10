@@ -837,6 +837,8 @@ a.gas-badge:hover {
   align-items: center;
   gap: 8px;
   text-align: center;
+  color: inherit;
+  text-decoration: none;
 }
 
 .rivalry-guest .stat-name {
@@ -866,10 +868,12 @@ a.gas-badge:hover {
   gap: 12px;
 }
 
-.stat-row {
+.stat-row-link {
   display: flex;
   align-items: center;
   gap: 12px;
+  color: inherit;
+  text-decoration: none;
 }
 
 .stat-rank {
@@ -1107,12 +1111,13 @@ a.gas-badge:hover {
 }
 
 .presence-dot.is-loss {
-  background: var(--grey-light);
+  background: var(--red-bright);
+  box-shadow: 0 0 6px rgba(226, 38, 42, 0.6);
 }
 
 .presence-dot.is-win {
-  background: var(--red-bright);
-  box-shadow: 0 0 6px rgba(226, 38, 42, 0.6);
+  background: #2ecc71;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.6);
 }
 
 .theme-tags {
@@ -1194,15 +1199,15 @@ a.gas-badge:hover {
 }
 
 .history-result.is-win {
-  background: rgba(226, 38, 42, 0.15);
-  color: var(--red-bright);
-  border: 1px solid rgba(226, 38, 42, 0.4);
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.4);
 }
 
 .history-result.is-loss {
-  background: rgba(184, 184, 184, 0.08);
-  color: var(--text-light);
-  border: 1px solid var(--grey-border);
+  background: rgba(226, 38, 42, 0.15);
+  color: var(--red-bright);
+  border: 1px solid rgba(226, 38, 42, 0.4);
 }
 
 /* ---------- Footer ---------- */

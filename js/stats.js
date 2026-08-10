@@ -4,10 +4,12 @@ const MIN_MATCHUPS_FOR_RIVALRY = 2;
 function statRowHTML(rank, comedian, value) {
   return `
     <li class="stat-row">
-      <span class="stat-rank">${rank}</span>
-      ${avatarHTML(comedian, "", "avatar-sm")}
-      <span class="stat-name">${comedian.name}</span>
-      <span class="stat-value">${value}</span>
+      <a class="stat-row-link" href="guest.html?id=${comedian.id}">
+        <span class="stat-rank">${rank}</span>
+        ${avatarHTML(comedian, "", "avatar-sm")}
+        <span class="stat-name">${comedian.name}</span>
+        <span class="stat-value">${value}</span>
+      </a>
     </li>
   `;
 }
@@ -38,9 +40,11 @@ function hostRecordHTML(hosts) {
     .map(
       (c) => `
         <li class="stat-row">
-          ${avatarHTML(c, "", "avatar-sm")}
-          <span class="stat-name">${c.name}</span>
-          <span class="stat-value">${c.wins}-${c.losses}</span>
+          <a class="stat-row-link" href="guest.html?id=${c.id}">
+            ${avatarHTML(c, "", "avatar-sm")}
+            <span class="stat-name">${c.name}</span>
+            <span class="stat-value">${c.wins}-${c.losses}</span>
+          </a>
         </li>
       `
     )
@@ -79,15 +83,15 @@ function rivalryHTML(rivalry) {
   if (!rivalry) return '<p class="no-results">No repeat matchups yet.</p>';
   return `
     <div class="rivalry-display">
-      <div class="rivalry-guest">
+      <a class="rivalry-guest" href="guest.html?id=${rivalry.guestA.id}">
         ${avatarHTML(rivalry.guestA, "", "avatar-sm")}
         <span class="stat-name">${rivalry.guestA.name}</span>
-      </div>
+      </a>
       <span class="rivalry-vs">VS</span>
-      <div class="rivalry-guest">
+      <a class="rivalry-guest" href="guest.html?id=${rivalry.guestB.id}">
         ${avatarHTML(rivalry.guestB, "", "avatar-sm")}
         <span class="stat-name">${rivalry.guestB.name}</span>
-      </div>
+      </a>
     </div>
     <p class="rivalry-count">Faced off ${rivalry.count} times</p>
   `;
