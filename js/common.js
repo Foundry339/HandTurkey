@@ -60,3 +60,24 @@ function paginationControlsHTML(page, totalPages) {
     </div>
   `;
 }
+
+function initMobileNav() {
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("mobile-nav");
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("open");
+    toggle.classList.toggle("is-open", isOpen);
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  menu.addEventListener("click", (event) => {
+    if (event.target.tagName !== "A") return;
+    menu.classList.remove("open");
+    toggle.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+  });
+}
+
+initMobileNav();
