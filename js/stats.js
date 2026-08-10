@@ -118,7 +118,7 @@ function renderStats() {
   const nonHostComedians = COMEDIANS.filter((c) => !hostIds.has(c.id));
 
   document.getElementById("stat-most-wins").innerHTML = topGuestsHTML(nonHostComedians, (c) => c.wins);
-  document.getElementById("stat-most-losses").innerHTML = topGuestsHTML(COMEDIANS, (c) => c.losses);
+  document.getElementById("stat-most-losses").innerHTML = topGuestsHTML(nonHostComedians, (c) => c.losses);
   document.getElementById("stat-most-appearances").innerHTML = topGuestsHTML(
     nonHostComedians,
     (c) => c.wins + c.losses
