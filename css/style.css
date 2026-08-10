@@ -949,9 +949,16 @@ a.gas-badge:hover {
 /* ---------- Polls ---------- */
 
 .polls-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .polls-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .poll-card {
