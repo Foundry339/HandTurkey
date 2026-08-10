@@ -1,4 +1,3 @@
-const HOST_APPEARANCE_THRESHOLD = 0.9;
 const MIN_APPEARANCES_FOR_WIN_PCT = 3;
 const MIN_MATCHUPS_FOR_RIVALRY = 2;
 
@@ -31,21 +30,6 @@ function topWinPercentageHTML(guests) {
 
   if (!ranked.length) return '<li class="no-results">Not enough data yet.</li>';
   return ranked.map((c, i) => statRowHTML(i + 1, c, `${Math.round(winPct(c) * 100)}%`)).join("");
-}
-
-// Hosts are inferred as whoever appears in nearly every tracked episode,
-// rather than hardcoded, so the site keeps working if the show's hosts change.
-function detectHosts(episodes) {
-  if (!episodes.length) return [];
-  const appearances = {};
-  episodes.forEach((ep) => {
-    ep.contestantIds.forEach((id) => {
-      appearances[id] = (appearances[id] || 0) + 1;
-    });
-  });
-  return COMEDIANS.filter((c) => (appearances[c.id] || 0) / episodes.length >= HOST_APPEARANCE_THRESHOLD).sort(
-    (a, b) => (appearances[b.id] || 0) - (appearances[a.id] || 0)
-  );
 }
 
 function hostRecordHTML(hosts) {

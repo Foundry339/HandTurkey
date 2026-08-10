@@ -1,9 +1,11 @@
 function comedianCardHTML(c) {
   return `
     <div class="comedian-card">
-      ${avatarHTML(c)}
-      <p class="contestant-name">${c.name}</p>
-      <p class="contestant-record">Record: <strong>${c.wins}-${c.losses}</strong></p>
+      <a class="comedian-card-link" href="guest.html?id=${c.id}">
+        ${avatarHTML(c)}
+        <p class="contestant-name">${c.name}</p>
+        <p class="contestant-record">Record: <strong>${c.wins}-${c.losses}</strong></p>
+      </a>
       ${instagramLink(c.instagram)}
     </div>
   `;

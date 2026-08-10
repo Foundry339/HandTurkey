@@ -110,6 +110,7 @@ function rowToEpisode(row) {
     contestantIds,
     winnerId: row.winner_id,
     gasDigital: row.gas_digital || row.gasDigital || "",
+    prizeBook: row.prize_books || row.prize_book || "",
   };
 }
 

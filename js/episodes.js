@@ -6,9 +6,11 @@ function contestantCardHTML(comedianId, isWinnerRevealed) {
     : "";
   return `
     <div class="contestant-card${winnerClass}" data-comedian="${c.id}">
-      ${avatarHTML(c, badge)}
-      <p class="contestant-name">${c.name}</p>
-      <p class="contestant-record">Record: <strong>${c.wins}-${c.losses}</strong></p>
+      <a class="contestant-card-link" href="guest.html?id=${c.id}">
+        ${avatarHTML(c, badge)}
+        <p class="contestant-name">${c.name}</p>
+        <p class="contestant-record">Record: <strong>${c.wins}-${c.losses}</strong></p>
+      </a>
       ${instagramLink(c.instagram)}
     </div>
   `;
@@ -23,13 +25,19 @@ function gasDigitalBadgeHTML(value) {
     : `<span class="gas-badge">${label}</span>`;
 }
 
+function prizeBookBadgeHTML(value) {
+  const v = (value || "").trim();
+  if (!v) return "";
+  return `<span class="book-badge">&#128214; ${v}</span>`;
+}
+
 function episodeTileHTML(ep) {
   const contestantsHTML = ep.contestantIds
     .map((id) => contestantCardHTML(id, false))
     .join("");
 
   return `
-    <article class="episode-tile" data-episode="${ep.id}">
+    <article class="episode-tile" id="episode-${ep.id}" data-episode="${ep.id}">
       <button class="episode-toggle" aria-expanded="false">
         <span class="episode-toggle-left">
           <span class="episode-number">Episode ${ep.id}</span>
@@ -42,6 +50,7 @@ function episodeTileHTML(ep) {
         <div class="episode-body-inner">
           <div class="episode-body-content">
             ${gasDigitalBadgeHTML(ep.gasDigital)}
+            ${prizeBookBadgeHTML(ep.prizeBook)}
             <div class="contestant-grid">${contestantsHTML}</div>
             <div class="episode-actions">
               <a class="btn btn-outline" href="${ep.youtubeUrl}" target="_blank" rel="noopener">
@@ -156,8 +165,30 @@ function renderEpisodes() {
   });
 }
 
+function goToEpisodeFromHash() {
+  const match = window.location.hash.match(/^#episode-(\d+)$/);
+  if (!match) return;
+  const targetId = Number(match[1]);
+
+  const sorted = [...EPISODES].sort((a, b) =>
+    episodeSortOrder === "newest" ? b.id - a.id : a.id - b.id
+  );
+  const index = sorted.findIndex((ep) => ep.id === targetId);
+  if (index === -1) return;
+
+  episodePage = Math.floor(index / EPISODES_PER_PAGE) + 1;
+  renderEpisodeList(EPISODES);
+
+  const tile = document.getElementById(`episode-${targetId}`);
+  if (!tile) return;
+  tile.classList.add("open");
+  tile.querySelector(".episode-toggle")?.setAttribute("aria-expanded", "true");
+  tile.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 loadSiteData()
   .then(renderEpisodes)
+  .then(goToEpisodeFromHash)
   .catch((err) => {
     console.error(err);
     document.getElementById("episode-list").innerHTML =

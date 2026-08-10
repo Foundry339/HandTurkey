@@ -1,7 +1,24 @@
-// Shared helpers used by both the episodes page and the comedians page.
+// Shared helpers used across the site's pages.
+
+const HOST_APPEARANCE_THRESHOLD = 0.9;
 
 function getComedian(id) {
   return COMEDIANS.find((c) => c.id === id);
+}
+
+// Hosts are inferred as whoever appears in nearly every tracked episode,
+// rather than hardcoded, so the site keeps working if the show's hosts change.
+function detectHosts(episodes) {
+  if (!episodes.length) return [];
+  const appearances = {};
+  episodes.forEach((ep) => {
+    ep.contestantIds.forEach((id) => {
+      appearances[id] = (appearances[id] || 0) + 1;
+    });
+  });
+  return COMEDIANS.filter((c) => (appearances[c.id] || 0) / episodes.length >= HOST_APPEARANCE_THRESHOLD).sort(
+    (a, b) => (appearances[b.id] || 0) - (appearances[a.id] || 0)
+  );
 }
 
 function getInitials(name) {
