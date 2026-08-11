@@ -898,6 +898,23 @@ a.gas-badge:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 468px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-border) transparent;
+}
+
+.stat-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stat-list::-webkit-scrollbar-thumb {
+  background: var(--grey-border);
+  border-radius: 999px;
+}
+
+.stat-list::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
 }
 
 .stat-row-link {
