@@ -80,6 +80,18 @@ function renderGuestPage() {
   document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", `HandTurkey — ${comedian.name}`);
   document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", description);
 
+  const breadcrumbScript = document.getElementById("breadcrumb-jsonld");
+  if (breadcrumbScript) {
+    const breadcrumb = JSON.parse(breadcrumbScript.textContent);
+    breadcrumb.itemListElement.push({
+      "@type": "ListItem",
+      position: 3,
+      name: comedian.name,
+      item: `https://handturkey.org/guest.html?id=${encodeURIComponent(comedian.id)}`,
+    });
+    breadcrumbScript.textContent = JSON.stringify(breadcrumb);
+  }
+
   container.innerHTML = `
     <div class="guest-header">
       ${avatarHTML(comedian, "", "guest-avatar")}
