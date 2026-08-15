@@ -111,16 +111,16 @@ function renderGuestPage() {
     <h2 class="section-title">Episode Presence</h2>
     ${presenceTimelineHTML(comedian, EPISODES)}
 
+    <h2 class="section-title">Episode History</h2>
+    <div class="episode-list" id="guest-episode-list">
+      ${guestEpisodes.map((ep) => episodeTileHTML(ep, comedian.id)).join("")}
+    </div>
+
     <h2 class="section-title">Themes Played</h2>
     <div class="theme-tags">${themeTagsHTML(guestEpisodes)}</div>
 
     <h2 class="section-title">Books Played For</h2>
     <div class="theme-tags">${bookTagsHTML(guestEpisodes)}</div>
-
-    <h2 class="section-title">Episode History</h2>
-    <div class="episode-list" id="guest-episode-list">
-      ${guestEpisodes.map((ep) => episodeTileHTML(ep, comedian.id)).join("")}
-    </div>
   `;
 
   initEpisodeTileInteractions(document.getElementById("guest-episode-list"));
