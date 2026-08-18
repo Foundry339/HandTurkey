@@ -30,6 +30,11 @@ async function submitVote(pollId, optionKey) {
   return response.json();
 }
 
+function pollStatusBadgeHTML(poll) {
+  const isClosed = poll.status === "closed";
+  return `<span class="poll-status-badge${isClosed ? "" : " poll-status-live"}"><span class="poll-status-dot"></span>${isClosed ? "Closed" : "Live"}</span>`;
+}
+
 function pollVoteHTML(poll) {
   const optionsHTML = poll.options
     .map(
@@ -40,28 +45,35 @@ function pollVoteHTML(poll) {
 
   return `
     <div class="poll-card" data-poll-id="${poll.id}">
-      <h3 class="poll-question">${poll.question}</h3>
+      <div class="poll-card-header">
+        <h3 class="poll-question">${poll.question}</h3>
+        ${pollStatusBadgeHTML(poll)}
+      </div>
       <div class="poll-options">${optionsHTML}</div>
     </div>
   `;
 }
 
 function pollResultsHTML(poll, tallies, selectedOption) {
-  const total = Object.values(tallies).reduce((sum, n) => sum + n, 0);
+  const counts = poll.options.map((_, i) => tallies[`option_${i + 1}`] || 0);
+  const total = counts.reduce((sum, n) => sum + n, 0);
+  const maxCount = Math.max(...counts);
+  const isTie = total > 0 && counts.filter((c) => c === maxCount).length > 1;
 
   const rows = poll.options
     .map((opt, i) => {
       const key = `option_${i + 1}`;
-      const count = tallies[key] || 0;
+      const count = counts[i];
       const pct = total ? Math.round((count / total) * 100) : 0;
       const isSelected = key === selectedOption;
+      const isLeading = total > 0 && !isTie && count === maxCount;
       return `
-        <div class="poll-result-row${isSelected ? " is-selected" : ""}">
+        <div class="poll-result-row${isSelected ? " is-selected" : ""}${isLeading ? " is-leading" : ""}">
           <div class="poll-result-label">
-            <span>${opt}${isSelected ? ' <span class="poll-your-vote">Your vote</span>' : ""}</span>
-            <span>${pct}% (${count})</span>
+            <span>${opt}${isSelected ? ' <span class="poll-your-vote">Your vote</span>' : ""}${isLeading ? ' <span class="poll-leading-tag">Leading</span>' : ""}</span>
+            <span class="poll-stat" data-pct="${pct}" data-count="${count}">0% (0)</span>
           </div>
-          <div class="poll-bar-track"><div class="poll-bar-fill" style="width:${pct}%"></div></div>
+          <div class="poll-bar-track"><div class="poll-bar-fill" data-pct="${pct}" style="transition-delay:${i * 80}ms"></div></div>
         </div>
       `;
     })
@@ -69,11 +81,36 @@ function pollResultsHTML(poll, tallies, selectedOption) {
 
   return `
     <div class="poll-card" data-poll-id="${poll.id}">
-      <h3 class="poll-question">${poll.question}</h3>
+      <div class="poll-card-header">
+        <h3 class="poll-question">${poll.question}</h3>
+        ${pollStatusBadgeHTML(poll)}
+      </div>
       <div class="poll-results">${rows}</div>
       <p class="poll-total">${total} vote${total === 1 ? "" : "s"} total</p>
     </div>
   `;
+}
+
+function animatePollResults(card) {
+  requestAnimationFrame(() => {
+    card.querySelectorAll(".poll-bar-fill").forEach((el) => {
+      el.style.width = `${el.dataset.pct}%`;
+    });
+  });
+
+  card.querySelectorAll(".poll-stat").forEach((el) => {
+    const targetPct = Number(el.dataset.pct);
+    const targetCount = Number(el.dataset.count);
+    const duration = 600;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = `${Math.round(targetPct * eased)}% (${Math.round(targetCount * eased)})`;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
 }
 
 async function handlePollOptionClick(event) {
@@ -84,6 +121,7 @@ async function handlePollOptionClick(event) {
   const optionKey = btn.dataset.option;
   const poll = POLLS.find((p) => p.id === pollId);
   const card = btn.closest(".poll-card");
+  const container = card.parentElement;
 
   card.querySelectorAll(".poll-option").forEach((b) => (b.disabled = true));
   btn.classList.add("is-submitting");
@@ -92,6 +130,8 @@ async function handlePollOptionClick(event) {
     const tallies = await submitVote(pollId, optionKey);
     saveVotedPoll(pollId, optionKey);
     card.outerHTML = pollResultsHTML(poll, tallies, optionKey);
+    const newCard = container.querySelector(`.poll-card[data-poll-id="${pollId}"]`);
+    if (newCard) animatePollResults(newCard);
   } catch (err) {
     console.error(`Failed to submit vote for poll ${pollId}`, err);
     card.querySelectorAll(".poll-option").forEach((b) => (b.disabled = false));
@@ -130,7 +170,11 @@ async function renderPolls() {
       const slot = container.querySelector(`.poll-card-slot[data-poll-id="${poll.id}"]`);
       try {
         const tallies = await fetchTallies(poll.id);
-        if (slot) slot.outerHTML = pollResultsHTML(poll, tallies, voted[poll.id]);
+        if (slot) {
+          slot.outerHTML = pollResultsHTML(poll, tallies, voted[poll.id]);
+          const card = container.querySelector(`.poll-card[data-poll-id="${poll.id}"]`);
+          if (card) animatePollResults(card);
+        }
       } catch (err) {
         console.error(`Failed to load results for poll ${poll.id}`, err);
         if (slot) slot.innerHTML = '<p class="no-results">Couldn\'t load results for this poll.</p>';
