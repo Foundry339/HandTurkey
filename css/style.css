@@ -1043,6 +1043,12 @@ a.gas-badge:hover {
   50% { opacity: 0.35; transform: scale(0.7); }
 }
 
+.poll-status-badge.poll-status-closed {
+  color: #1a1400;
+  background: #e8b923;
+  border-color: #e8b923;
+}
+
 .poll-options {
   display: flex;
   flex-direction: column;

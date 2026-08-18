@@ -32,7 +32,8 @@ async function submitVote(pollId, optionKey) {
 
 function pollStatusBadgeHTML(poll) {
   const isClosed = poll.status === "closed";
-  return `<span class="poll-status-badge${isClosed ? "" : " poll-status-live"}"><span class="poll-status-dot"></span>${isClosed ? "Closed" : "Live"}</span>`;
+  const modifier = isClosed ? " poll-status-closed" : " poll-status-live";
+  return `<span class="poll-status-badge${modifier}">${isClosed ? "" : '<span class="poll-status-dot"></span>'}${isClosed ? "Closed" : "Live"}</span>`;
 }
 
 function pollVoteHTML(poll) {
