@@ -17,7 +17,9 @@ function renderEpisodeList(episodes) {
 
   const { items, page, totalPages } = paginate(sorted, episodePage, EPISODES_PER_PAGE);
   episodePage = page;
-  list.innerHTML = items.map((ep) => episodeTileHTML(ep)).join("");
+  list.innerHTML = items
+    .map((ep, i) => episodeTileHTML(ep, undefined, page === 1 && i === 0))
+    .join("");
   paginationEl.innerHTML = paginationControlsHTML(page, totalPages);
 }
 

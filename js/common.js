@@ -113,7 +113,8 @@ function prizeBookBadgeHTML(value) {
 
 // highlightGuestId is optional — when set (e.g. from a guest's own page),
 // a Won/Lost pill for that specific guest shows in the collapsed header.
-function episodeTileHTML(ep, highlightGuestId) {
+// startOpen renders the tile already expanded (used for the newest episode on the homepage).
+function episodeTileHTML(ep, highlightGuestId, startOpen) {
   const contestantsHTML = ep.contestantIds
     .map((id) => contestantCardHTML(id, false))
     .join("");
@@ -126,8 +127,8 @@ function episodeTileHTML(ep, highlightGuestId) {
     : "";
 
   return `
-    <article class="episode-tile" id="episode-${ep.id}" data-episode="${ep.id}">
-      <button class="episode-toggle" aria-expanded="false">
+    <article class="episode-tile${startOpen ? " open" : ""}" id="episode-${ep.id}" data-episode="${ep.id}">
+      <button class="episode-toggle" aria-expanded="${startOpen ? "true" : "false"}">
         <span class="episode-toggle-left">
           <span class="episode-number">Episode ${ep.id}</span>
           <span class="episode-title">${ep.title}</span>
