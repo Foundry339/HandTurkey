@@ -63,7 +63,7 @@ function renderGuestPage() {
     return;
   }
 
-  document.title = `HandTurkey — ${comedian.name}`;
+  document.title = `HandTurkey - ${comedian.name}`;
 
   const hosts = detectHosts(EPISODES);
   const isHost = hosts.some((h) => h.id === comedian.id);
@@ -75,9 +75,9 @@ function renderGuestPage() {
 
   const description = `${comedian.name}'s Story Warz stats: ${comedian.wins}-${comedian.losses} record across ${total} episode${total === 1 ? "" : "s"}. See full episode history on HandTurkey.`;
   document.querySelector('meta[name="description"]')?.setAttribute("content", description);
-  document.querySelector('meta[property="og:title"]')?.setAttribute("content", `HandTurkey — ${comedian.name}`);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", `HandTurkey - ${comedian.name}`);
   document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
-  document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", `HandTurkey — ${comedian.name}`);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", `HandTurkey - ${comedian.name}`);
   document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", description);
 
   const breadcrumbScript = document.getElementById("breadcrumb-jsonld");
