@@ -1,5 +1,8 @@
 const MIN_APPEARANCES_FOR_WIN_PCT = 3;
 const MIN_MATCHUPS_FOR_RIVALRY = 2;
+const MIN_WINS_FOR_MOST_WINS = 2;
+const MIN_LOSSES_FOR_MOST_LOSSES = 4;
+const MIN_APPEARANCES_FOR_MOST_APPEARANCES = 4;
 
 function statRowHTML(rank, comedian, value) {
   return `
@@ -121,10 +124,16 @@ function renderStats() {
   const hostIds = new Set(hosts.map((c) => c.id));
   const nonHostComedians = COMEDIANS.filter((c) => !hostIds.has(c.id));
 
-  document.getElementById("stat-most-wins").innerHTML = topGuestsHTML(nonHostComedians, (c) => c.wins);
-  document.getElementById("stat-most-losses").innerHTML = topGuestsHTML(nonHostComedians, (c) => c.losses);
+  document.getElementById("stat-most-wins").innerHTML = topGuestsHTML(
+    nonHostComedians.filter((c) => c.wins >= MIN_WINS_FOR_MOST_WINS),
+    (c) => c.wins
+  );
+  document.getElementById("stat-most-losses").innerHTML = topGuestsHTML(
+    nonHostComedians.filter((c) => c.losses >= MIN_LOSSES_FOR_MOST_LOSSES),
+    (c) => c.losses
+  );
   document.getElementById("stat-most-appearances").innerHTML = topGuestsHTML(
-    nonHostComedians,
+    nonHostComedians.filter((c) => c.wins + c.losses >= MIN_APPEARANCES_FOR_MOST_APPEARANCES),
     (c) => c.wins + c.losses
   );
   document.getElementById("stat-win-percentage").innerHTML = topWinPercentageHTML(COMEDIANS);
