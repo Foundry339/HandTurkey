@@ -97,6 +97,22 @@ function rivalryHTML(rivalry) {
   `;
 }
 
+// Scores aren't tracked in the sheets, so these records are set by hand.
+const LOWEST_SCORE_RECORD = { guestId: "big-jay-oakerson", points: 0 };
+const HIGHEST_REGULATION_SCORE_RECORD = { guestId: "dru-montana", points: 26 };
+
+function scoreRecordHTML(record) {
+  const guest = getComedian(record.guestId);
+  if (!guest) return '<p class="no-results">No data yet.</p>';
+  return `
+    <a class="record-display" href="guest.html?id=${guest.id}">
+      ${avatarHTML(guest, "", "avatar-sm")}
+      <span class="stat-name">${guest.name}</span>
+    </a>
+    <p class="record-score"><span class="record-score-value">${record.points}</span> points</p>
+  `;
+}
+
 function renderStats() {
   document.getElementById("stat-total-episodes").textContent = EPISODES.length;
   document.getElementById("stat-total-guests").textContent = COMEDIANS.length;
@@ -117,6 +133,10 @@ function renderStats() {
   document.getElementById("stat-biggest-rivalry").innerHTML = rivalryHTML(
     biggestRivalry(EPISODES, hostIds)
   );
+  document.getElementById("stat-lowest-score").innerHTML = scoreRecordHTML(LOWEST_SCORE_RECORD);
+  document.getElementById("stat-highest-regulation-score").innerHTML = scoreRecordHTML(
+    HIGHEST_REGULATION_SCORE_RECORD
+  );
 }
 
 loadSiteData()
@@ -132,6 +152,7 @@ loadSiteData()
     ].forEach((id) => {
       document.getElementById(id).innerHTML = '<li class="no-results">Couldn\'t load data.</li>';
     });
-    document.getElementById("stat-biggest-rivalry").innerHTML =
-      '<p class="no-results">Couldn\'t load data.</p>';
+    ["stat-biggest-rivalry", "stat-lowest-score", "stat-highest-regulation-score"].forEach((id) => {
+      document.getElementById(id).innerHTML = '<p class="no-results">Couldn\'t load data.</p>';
+    });
   });
